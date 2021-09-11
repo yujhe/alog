@@ -17,8 +17,6 @@ class UnionFindSolution:
             return p
 
         def union(p, q):
-            global max_size
-
             root_p = find(p)
             root_q = find(q)
 
