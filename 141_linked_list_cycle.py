@@ -18,4 +18,4 @@ class Solution:
             if fast == slow:
                 return True
 
-        False
+        return False
