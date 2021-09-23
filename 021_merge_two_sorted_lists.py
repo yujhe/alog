@@ -1,5 +1,5 @@
 # Definition for singly-linked list.
-from typing import List, Optional
+from typing import Optional
 
 
 class ListNode:
@@ -15,12 +15,12 @@ class Solution:
         if not l2:
             return l1
 
-        if l1.val > l2.val:
-            l2.next = self.mergeTwoLists(l1, l2.next)
-            return l2
-        else:
+        if l1.val < l2.val:
             l1.next = self.mergeTwoLists(l1.next, l2)
             return l1
+        else:
+            l2.next = self.mergeTwoLists(l1, l2.next)
+            return l2
 
 
 class WhileSolution:
@@ -35,12 +35,20 @@ class WhileSolution:
                 head.next = l1
                 break
 
-            if l1.val > l2.val:
-                head.next = l2
-                l2 = l2.next
-            else:
+            if l1.val < l2.val:
                 head.next = l1
                 l1 = l1.next
+            else:
+                head.next = l2
+                l2 = l2.next
+
             head = head.next
 
         return dummy.next
+
+
+if __name__ == '__main__':
+    # given two sorted linked list,
+    # merge the two list in sorted
+
+    pass

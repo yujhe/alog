@@ -13,7 +13,10 @@ class Solution:
 
 
 if __name__ == '__main__':
-    input = [1, 2, 3, 1]
+    # given an array of integers,
+    # return true if the array contains duplicate numbers
+    nums = [1, 2, 3, 1]
 
-    print(f'input: {input}')
-    print(f'output: {Solution().containsDuplicate(input)}')
+    solution = Solution()
+
+    assert solution.containsDuplicate(nums) == True

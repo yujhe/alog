@@ -13,11 +13,22 @@ class Solution:
             else:
                 ans[s_char] = [str]
 
-        return ans.values()
+        return list(ans.values())
 
 
 if __name__ == '__main__':
-    input = ["eat", "tea", "tan", "ate", "nat", "bat"]
+    # given an array of strings,
+    # group the strings by anagrams, you can return it in any order
+    # anagrams is formed by rearranging the letters, all the original letters exactly once.
+    # ex: ['eat', 'ate', 'aet'] are anagrams
 
-    print(f'input: {input}')
-    print(f'output: {Solution().groupAnagrams(input)}')
+    strs = ["eat", "tea", "tan", "ate", "nat", "bat"]
+    output = [['bat'], ['nat', 'tan'], ['ate', 'eat', 'tea']]
+
+    solution = Solution()
+    ans = solution.groupAnagrams(strs)
+
+    assert len(ans) == len(output), f'# of ans={len(ans)}'
+    for i in ans:
+        i.sort()
+        assert i in output, f'ans={i} is not correct'

@@ -13,7 +13,10 @@ class Solution:
 
 
 if __name__ == '__main__':
-    input = [3, 0, 1]
+    # given an array of n distinct numbers in [0, n]
+    # return the missing number in the array
+    nums = [3, 0, 1]
 
-    print(f'input: {input}')
-    print(f'output: {Solution().missingNumber(input)}')
+    solution = Solution()
+
+    assert solution.missingNumber(nums) == 2

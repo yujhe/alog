@@ -7,7 +7,12 @@ class Solution:
 
 
 if __name__ == '__main__':
-    input = ('anagram', 'nagaram')
+    # given two strings,
+    # return true if the two string are anagram
+    # anagram are strings that contains the same characters
+    s = "anagram"
+    t = "nagaram"
 
-    print(f'input: {input}')
-    print(f'output: {Solution().isAnagram(input[0], input[1])}')
+    solution = Solution()
+
+    assert solution.isAnagram(s, t)
