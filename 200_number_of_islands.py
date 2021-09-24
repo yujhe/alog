@@ -51,18 +51,51 @@ class Solution:
                 if j + 1 < n and grid[i][j + 1] == '1':
                     union(i*n + j, i*n + j + 1)
 
-        print(f'zeros: {zero_count}')
-
         return count - zero_count
+
+    def numIslandsDFS(self, grid: List[List[str]]) -> int:
+        m, n = len(grid), len(grid[0])
+        marked = [[False for _ in range(n)] for _ in range(m)]
+        count = 0
+
+        for i in range(m):
+            for j in range(n):
+                if not marked[i][j]:
+                    self.dfs(grid, i, j, marked)
+                    if grid[i][j] == '1':
+                        count += 1
+
+        return count
+
+    def dfs(self, grid, i, j, marked):
+        m, n = len(grid), len(grid[0])
+        if i < 0 or i >= m or j < 0 or j >= n or marked[i][j]:
+            return
+
+        marked[i][j] = True
+        if grid[i][j] == '0':
+            return
+
+        self.dfs(grid, i-1, j, marked)
+        self.dfs(grid, i+1, j, marked)
+        self.dfs(grid, i, j-1, marked)
+        self.dfs(grid, i, j+1, marked)
 
 
 if __name__ == '__main__':
-    input = [
+    # given a m x n grid which represent by '1' and '0'
+    # return the # of island (island is represented by '1' and surrounded by '0')
+
+    grid = [
         ["1", "1", "0", "0", "0"],
         ["1", "1", "0", "0", "0"],
         ["0", "0", "1", "0", "0"],
         ["0", "0", "0", "1", "1"]
     ]
 
-    print(f'input: \n' + '\n'.join(' '.join(x) for x in input))
-    print(f'output: {Solution().numIslands(input)}')
+    solution = Solution()
+    ans = solution.numIslands(grid)
+    assert ans == 3, f'# of islands={ans}'
+
+    ans_dfs = solution.numIslandsDFS(grid)
+    assert ans_dfs == 3, f'# of islands={ans_dfs}'
