@@ -58,21 +58,20 @@ class SetSolution:
                 continue
 
             count = 1
-            while n + 1 in nums:
-                n += 1
+            while n + count in nums:
                 count += 1
 
-            longest = count if count > longest else longest
+            longest = max(longest, count)
 
         return longest
 
 
 if __name__ == '__main__':
-    nums = [1, 2, 0, 1]
+    # given an integer array,
+    # return the longest consecutive integers
+    nums = [100, 4, 200, 1, 3, 2]
 
-    print(f'input: {nums}')
-    print(
-        f'output (UFSolution): {UnionFindSolution().longestConsecutive(nums)}')
+    solution = SetSolution()
+    ans = solution.longestConsecutive(nums)
 
-    print(f'input: {nums}')
-    print(f'output (SetSolution): {SetSolution().longestConsecutive(nums)}')
+    assert ans == 4, f'ans={ans}'

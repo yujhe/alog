@@ -43,8 +43,11 @@ class Solution2:
 
 
 if __name__ == '__main__':
-    input = [[1, 2], [2, 3], [3, 4], [1, 3]]
+    # given an array of intervals, interval[i] = [start i, end i]
+    # return the minimum intervals you need to delete to get a non-overlaping intervals
+    intervals = [[1, 2], [2, 3], [3, 4], [1, 3]]
 
-    print(f'input: {input}')
-    print(f'output: {Solution().eraseOverlapIntervals(input)}')
-    print(f'output: {Solution2().eraseOverlapIntervals(input)}')
+    solution = Solution()
+    ans = solution.eraseOverlapIntervals(intervals)
+
+    assert ans == 1, f'ans={ans}'
