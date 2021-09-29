@@ -8,7 +8,7 @@ class Solution:
         return ans
 
     def dfs(self, left_num, right_num, rs, string):
-        # skip case that `(` is more than `)`
+        # skip case that the used `)` is more than `(`
         if right_num < left_num:
             return
         if left_num == 0 and right_num == 0:
