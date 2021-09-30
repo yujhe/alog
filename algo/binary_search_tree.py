@@ -22,219 +22,92 @@ class RedBlackNode:
 
 class BST:
     def __init__(self):
-        self.root = None
+        pass
 
     def put(self, key, val):
-        self.root = self._put(self.root, key, val)
+        pass
 
     def _put(self, x, key, val):
-        if x == None:
-            return Node(key, val)
-
-        cmp = key - x.key
-        if cmp < 0:
-            x.left = self._put(x.left, key, val)
-        elif cmp > 0:
-            x.right = self._put(x.right, key, val)
-        else:
-            x.val = val
-
-        x.count = 1 + self._size(x.left) + self._size(x.right)
-        return x
+        pass
 
     def get(self, key):
-        x = self.root
-        while x != None:
-            cmp = key - x.key
-            if cmp < 0:
-                x = x.left
-            elif cmp > 0:
-                x = x.right
-            else:
-                return x.val
-        return None
+        pass
 
     # return smallest key
     def min(self):
-        x = self._min(self.root)
-        return x.key
+        pass
 
     def _min(self, x):
-        while x.left != None:
-            x = x.left
-
-        return x
+        pass
 
     # return largest key
     def max(self):
-        x = self.root
-        while x.right != None:
-            x = x.right
-
-        return x.key
+        pass
 
     # return largest key <= given key
     def floor(self, key):
-        x = self._floor(self.root, key)
-        if x == None:
-            return None
-        return x.key
+        pass
 
     def _floor(self, x, key):
-        if x == None:
-            return None
-
-        cmp = key - x.key
-        if cmp == 0:
-            return x
-        if cmp < 0:
-            return self._floor(x.left, key)
-
-        t = self._floor(x.right, key)
-        if t == None:
-            return x
-        else:
-            return t
+        pass
 
     # return smallest key >= given key
     def ceil(self, key):
-        x = self._ceil(self.root, key)
-        if x == None:
-            return None
-        return x.key
+        pass
 
     def _ceil(self, x, key):
-        if x == None:
-            return None
-
-        cmp = key - x.key
-        if cmp == 0:
-            return x
-        if cmp > 0:
-            return self._ceil(x.right, key)
-
-        t = self._ceil(x.left, key)
-        if t == None:
-            return x
-        else:
-            return t
+        pass
 
     # return the count at the root
     def size(self):
-        return self._size(self.root)
+        pass
 
     # return # of keys betweeb lo and hi
     def size_between(self, lo, hi):
-        if self.get(hi):
-            return self.rank(hi) - self.rank(lo) + 1
-        else:
-            return self.rank(hi) - self.rank(lo)
+        pass
 
     def _size(self, x):
-        if x == None:
-            return 0
-        return x.count
+        pass
 
     # return # of keys < given key
     def rank(self, key):
-        return self._rank(self.root, key)
+        pass
 
     def _rank(self, x, key):
-        if x == None:
-            return 0
-
-        cmp = key - x.key
-        if cmp < 0:
-            return self._rank(x.left, key)
-        elif cmp > 0:
-            return 1 + self._size(x.left) + self._rank(x.right, key)
-        else:
-            return self._size(x.left)
+        pass
 
     def keys(self):
-        queue = ArrayQueue()
-        self._inorder(self.root, queue)
-        return queue
+        pass
 
     # return keys between lo and hi
     def keys_between(self, lo, hi):
-        queue = ArrayQueue()
-        self._keys_between(self.root, lo, hi, queue)
-        return queue
+        pass
 
     def _keys_between(self, x, lo, hi, queue):
-        if x == None:
-            return
-
-        self._keys_between(x.left, lo, hi, queue)
-        if x.key >= lo and x.key <= hi:
-            queue.enqueue(x.key)
-        self._keys_between(x.right, lo, hi, queue)
+        pass
 
     def _preorder(self, x, queue):
-        # preorder: root -> left -> right
-        if x == None:
-            return
+        pass
 
-        queue.enque(x.key)
-        self._preorder(x.left, queue)
-        self._preorder(x.right, queue)
-
+    # inorder: left -> root -> right
     def _inorder(self, x, queue):
-        # inorder: left -> root -> right
-        if x == None:
-            return
-        self._inorder(x.left, queue)
-        queue.enqueue(x.key)
-        self._inorder(x.right, queue)
+        pass
 
+    # postorder: left -> right -> root
     def _postorder(self, x, queue):
-        # postorder: left -> right -> root
-        if x == None:
-            return
-
-        self._postorder(x.left, queue)
-        self._postorder(x.right, queue)
-        queue.enqueue(x.key)
+        pass
 
     def delete(self, key):
-        self.root = self._delete(self.root, key)
+        pass
 
     def _delete(self, x, key):
-        if x == None:
-            return None
-
-        cmp = key - x.key
-        if cmp < 0:
-            x.left = self._delete(x.left, key)
-        elif cmp > 0:
-            x.right = self._delete(x.right, key)
-        else:
-            if x.left == None:
-                return x.right
-            if x.right == None:
-                return x.left
-
-            t = x
-            x = self._min(t.right)
-            x.right = self._delete_min(t.right)
-            x.left = t.left
-
-        x.count = 1 + self._size(x.left) + self._size(x.right)
-
-        return x
+        pass
 
     def delete_min(self):
-        self.root = self._delete_min(self.root)
+        pass
 
     def _delete_min(self, x):
-        if x.left == None:
-            return x.right
-
-        x.left = self._delete_min(x.left)
-        x.count = 1 + self._size(x.left) + self._size(x.right)
-
-        return x
+        pass
 
 
 class RedBlackBST:

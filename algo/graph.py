@@ -3,540 +3,301 @@ from typing import Deque
 
 class Graph:
     def __init__(self, v):
-        self.v = v
-        self.adj = [Deque() for _ in range(v)]
+        pass
 
     # return # of vertices
     def V(self) -> int:
-        return self.v
+        pass
 
     # return # of edges
     def E(self) -> int:
-        return int(sum([len(i) for i in self.adj]) / 2)
+        pass
 
     # add edge between v and w
     def add_edge(self, v: int, w: int) -> None:
-        self.adj[v].appendleft(w)
-        self.adj[w].appendleft(v)
+        pass
 
     # return the vertices adjacent to vertex v
     def get_adj(self, v: int) -> list[int]:
-        return self.adj[v]
+        pass
 
     # return the degree of vertex v
     def get_degree(self, v: int) -> int:
-        return len(self.adj[v])
+        pass
 
 
 class Digraph:
     def __init__(self, v):
-        self.v = v
-        self.adj = [Deque() for _ in range(v)]
-        self.indegree = [0] * v
+        pass
 
     # return # of vertices
     def V(self) -> int:
-        return self.v
+        pass
 
     # return # of edges
     def E(self) -> int:
-        return sum([len(i) for i in self.adj])
+        pass
 
     # add edge between v and w
     def add_edge(self, v: int, w: int) -> None:
-        self.adj[v].appendleft(w)
-        self.indegree[w] += 1
+        pass
 
     # return the vertices adjacent to vertex v
     def get_adj(self, v: int) -> list[int]:
-        return self.adj[v]
+        pass
 
     # return the indegree of vertex v
     def get_indegree(self, v: int) -> int:
-        return self.indegree[v]
+        pass
 
     # return the outdegree of vertex v
     def get_outdegree(self, v: int) -> int:
-        return len(self.adj[v])
+        pass
 
     # return the reverse of the digraph
     def reverse(self):
-        g = Digraph(self.v)
-        for v in range(self.v):
-            for w in self.adj[v]:
-                g.add_edge(w, v)
-
-        return g
+        pass
 
 
 class DepthFirstPaths:
     def __init__(self, g: Graph, s: int):
-        self.source = s
-        self.visited = [False] * g.V()
-        self.edge_to = [None] * g.V()
-
-        self.dfs(g, s)
+        pass
 
     # depth first search from v
     def dfs(self, g: Graph, v: int) -> None:
-        self.visited[v] = True
-
-        for w in g.get_adj(v):
-            if not self.visited[w]:
-                self.edge_to[w] = v
-                self.dfs(g, w)
+        pass
 
     # is there a path between source to v?
     def has_path_to(self, v: int) -> bool:
-        return self.visited[v]
+        pass
 
     # return a path between source to v
     def get_path_to(self, v: int) -> list[int]:
-        if not self.has_path_to(v):
-            return None
-
-        path = Deque()
-        while v != self.source:
-            path.appendleft(v)
-            v = self.edge_to[v]
-        path.appendleft(self.source)
-
-        return list(path)
+        pass
 
 
 class BreadthFirstPaths:
     def __init__(self, g: Graph, ss: list[int]):
-        self.sources = ss
-        self.visited = [False] * g.V()
-        self.edge_to = [None] * g.V()
-        self.dist_to = [None] * g.V()
-
-        self.bfs(g, ss)
+        pass
 
     # breadth first search from multiple sources
     def bfs(self, g: Graph, ss: list[int]) -> None:
-        queue = Deque()
-        for s in ss:
-            self.visited[s] = True
-            self.dist_to[s] = 0
-            queue.append(s)
-
-        while queue:
-            v = queue.popleft()
-
-            for w in g.get_adj(v):
-                if not self.visited[w]:
-                    self.visited[w] = True
-                    self.edge_to[w] = v
-                    self.dist_to[w] = self.dist_to[v] + 1
-                    queue.append(w)
+        pass
 
     # is there a path between source to v
     def has_path_to(self, v: int) -> bool:
-        return self.visited[v]
+        pass
 
     # return the # of edges in a shortest path between source and v
     def get_dist_to(self, v: int) -> int:
-        return self.dist_to[v]
+        pass
 
     # return the shortest path between source and v
     def get_path_to(self, v: int) -> list[int]:
-        if not self.has_path_to(v):
-            return None
-
-        path = Deque()
-        while v not in self.sources:
-            path.appendleft(v)
-            v = self.edge_to[v]
-        path.appendleft(v)
-
-        return list(path)
+        pass
 
 
 class DepthFirstOrder:
     def __init__(self, g: Digraph):
-        self.visited = [False] * g.V()
-        self.pre = [0] * g.V()
-        self.post = [0] * g.V()
-        self.preorder = []
-        self.postorder = []
-
-        self.precounter = 0
-        self.postcounter = 0
-
-        for i in range(g.V()):
-            if not self.visited[i]:
-                self.dfs(g, i)
+        pass
 
     # depth first search for a graph
     def dfs(self, g: Graph, v: int) -> None:
-        self.visited[v] = True
-
-        self.pre[v] = self.precounter
-        self.precounter += 1
-        self.preorder.append(v)
-        for w in g.get_adj(v):
-            if not self.visited[w]:
-                self.dfs(g, w)
-        self.post[v] = self.postcounter
-        self.postcounter += 1
-        self.postorder.append(v)
+        pass
 
     # return the preorder number of v
     def get_preorder(self, v: int) -> int:
-        return self.pre[v]
+        pass
 
     # return the postorder number of v
     def get_postorder(self, v: int) -> int:
-        return self.post[v]
+        pass
 
     # return the vertices in preorder
     def get_pre(self) -> list[int]:
-        return self.preorder
+        pass
 
     # return the vertices in postorder
     def get_post(self) -> list[int]:
-        return self.postorder
+        pass
 
     # return the vertices in reverse postorder
     def get_reverse_post(self) -> list[int]:
-        return list(reversed(self.postorder))
+        pass
 
 
 class ConnectedComponent:
     def __init__(self, g: Graph):
-        self.visited = [False] * g.V()
-        self.cid = [None] * g.V()
-        self.size = {}
-        self.count = 0
-
-        for i in range(g.V()):
-            if not self.visited[i]:
-                self.dfs(g, i)
-                self.count += 1
+        pass
 
     # depth first search for a graph
     def dfs(self, g: Graph, v: int) -> None:
-        self.visited[v] = True
-        self.cid[v] = self.count
-        self.size[self.count] = self.size.get(self.count, 0) + 1
-
-        for w in g.get_adj(v):
-            if not self.visited[w]:
-                self.dfs(g, w)
+        pass
 
     # return true if v and w are in the same connected component
     def connected(self, v: int, w: int) -> bool:
-        return self.get_id(v) == self.get_id(w)
+        pass
 
     # return # of connected components
     def get_count(self) -> int:
-        return self.count
+        pass
 
     # return # of vertices in the connected component containing v
     def get_size(self, v) -> int:
-        return self.size[self.cid[v]]
+        pass
 
     # return the component id of v
     def get_id(self, v: int) -> int:
-        return self.cid[v]
+        pass
 
 
 class StrongConnectedComponents:
     def __init__(self, g: Digraph):
-        self.visited = [False] * g.V()
-        self.cid = [None] * g.V()
-        self.csize = {}
-        self.count = 0
-
-        reversed_g = g.reverse()
-        dfs_order = DepthFirstOrder(reversed_g)
-
-        for v in dfs_order.get_reverse_post():
-            if not self.visited[v]:
-                self.dfs(g, v)
-                self.count += 1
+        pass
 
     # depth first seach for a graph
     def dfs(self, g: Digraph, v: int) -> None:
-        self.visited[v] = True
-        self.cid[v] = self.count
-        self.csize[self.count] = self.csize.get(self.count, 0) + 1
-
-        for w in g.get_adj(v):
-            if not self.visited[w]:
-                self.dfs(g, w)
+        pass
 
     # return true if v and w are in the same connected component
     def connected(self, v: int, w: int) -> bool:
-        return self.get_id(v) == self.get_id(w)
+        pass
 
     # return # of connected components
     def get_count(self) -> int:
-        return self.count
+        pass
 
     # return # of vertices in the connected component containing v
     def get_size(self, v) -> int:
-        return self.csize[self.get_id(v)]
+        pass
 
     # return the component id of v
     def get_id(self, v: int) -> int:
-        return self.cid[v]
+        pass
 
 
 class Cycle:
     def __init__(self, g: Graph):
-        self.visited = [False] * g.V()
-        self.edge_to = [None] * g.V()
-        self.cycle = []
-
-        for v in range(g.V()):
-            if not self.visited[v]:
-                self.dfs(g, -1, v)
+        pass
 
     # depth first search from u to v
     def dfs(self, g: Graph, u: int, v: int) -> None:
-        self.visited[v] = True
-
-        for w in g.get_adj(v):
-            if self.has_cycle():
-                return
-
-            if not self.visited[w]:
-                self.edge_to[w] = v
-                self.dfs(g, v, w)
-            elif w != u:
-                x = v
-                while x != w:
-                    self.cycle.append(x)
-                    x = self.edge_to[x]
-                self.cycle.append(w)
-                self.cycle.append(v)
+        pass
 
     # return true if the graph haas a cycle
     def has_cycle(self) -> bool:
-        return len(self.cycle) > 0
+        pass
 
     # return a cycle in the graph
     def get_cycle(self) -> list[int]:
-        return self.cycle
+        pass
 
 
 class Dicycle:
     def __init__(self, g: Digraph):
-        self.visited = [False] * g.V()
-        self.edge_to = [None] * g.V()
-        self.visiting = [False] * g.V()
-        self.cycle = []
-
-        for v in range(g.V()):
-            if not self.visited[v]:
-                self.dfs(g, v)
+        pass
 
     # depth first search for finding cycle
     def dfs(self, g: Digraph, v: int):
-        self.visited[v] = True
-        self.visiting[v] = True
-
-        for w in g.get_adj(v):
-            if self.has_cycle():
-                return
-
-            if not self.visited[w]:
-                self.edge_to[w] = v
-                self.dfs(g, w)
-            elif self.visiting[w]:
-                q = Deque()
-
-                x = v
-                while x != w:
-                    q.appendleft(x)
-                    x = self.edge_to[x]
-                q.appendleft(w)
-                q.appendleft(v)
-
-                self.cycle = list(q)
-
-        self.visiting[v] = False
+        pass
 
     # return true if the graph haas a cycle
     def has_cycle(self) -> bool:
-        return len(self.cycle) > 0
+        pass
 
     # return a cycle in the graph
     def get_cycle(self) -> list[int]:
-        return self.cycle
+        pass
 
 
 class Eulerian:
     # eulerian path: a path that uses every edge in the graph exactly once
     class Edge:
         def __init__(self, v: int, w: int):
-            self.v = v
-            self.w = w
-            self.is_used = False
+            pass
 
         def other(self, v) -> int:
-            if v == self.v:
-                return self.w
-            elif v == self.w:
-                return self.v
-            else:
-                raise Exception("invalid endpoint")
+            pass
 
     def __init__(self, g: Graph):
-        self.path = None
-        self.cycle = None
-        self.adj = [[] for _ in range(g.V())]
+        pass
 
         # find petential start points where the degree of vertex is odd or any vertex with degree > 0
-        odd_degree_vertices_num = 0
-        s = -1  # start vertex
-        for v in range(g.V()):
-            if g.get_degree(v) % 2 > 0:
-                odd_degree_vertices_num += 1
-                s = v
-        if s < 0:
-            for v in range(g.V()):
-                if g.get_degree(v) > 0:
-                    s = v
-                    break
+        pass
 
         # special case if the graph has no edge
-        if s < 0:
-            s = 0
+        pass
 
         # eulerian path does not exist if more than two vertices has odd degree
-        if odd_degree_vertices_num > 2:
-            return
+        pass
 
         # build adjencent list with Edge class
-        for v in range(g.V()):
-            self_loop = 0
-            for w in g.get_adj(v):
-                edge = self.Edge(v, w)
-
-                # avoid exploring copies of an edge v-w
-                if v == w:
-                    if self_loop % 2 == 0:
-                        self.adj[v].append(edge)
-                        self.adj[w].append(edge)
-                    self_loop += 1
-                elif v < w:
-                    self.adj[v].append(edge)
-                    self.adj[w].append(edge)
-
-        path, cycle = Deque(), Deque()
-        self.dfs(s, path, cycle)
-
-        if len(path) == g.E() + 1:
-            self.path = path
-
-        if odd_degree_vertices_num == 0 and len(cycle) == g.E() + 1:
-            self.cycle = cycle
+        pass
 
     def dfs(self, v: int, path: Deque, cycle: Deque):
-        for edge in self.adj[v]:
-            if not edge.is_used:
-                edge.is_used = True
-                self.dfs(edge.other(v), path, cycle)
-        path.appendleft(v)
-        cycle.appendleft(v)
+        pass
 
     # return the vertices on an Eulerian path
     def get_path(self) -> list[int]:
-        return list(self.path)
+        pass
 
     # return true if the graph has an Eulerian path
     def has_eulerian_path(self) -> bool:
-        return self.path != None
+        pass
 
     # return the vertices on an Eulerian cycle
     def get_cycle(self) -> list[int]:
-        return list(self.cycle)
+        pass
 
     # return true if the graph has an Eulerian cycle
     def has_eulerian_cycle(self) -> bool:
-        return self.cycle != None
+        pass
 
 
 class DiEulerian:
     # eulerian path: a path that uses every edge in the graph exactly once
     class Edge:
         def __init__(self, v: int, w: int):
-            self.v = v
-            self.w = w
-            self.is_used = False
+            pass
 
         def other(self, v) -> int:
-            if v == self.v:
-                return self.w
-            elif v == self.w:
-                return self.v
-            else:
-                raise Exception("invalid endpoint")
+            pass
 
     # eulerian path: a path that uses every edge in the graph exactly once
     def __init__(self, g: Digraph):
-        self.adj = [[] for _ in range(g.V())]
-        self.path = None
-        self.cycle = None
+        pass
 
         # find petential start points where the vertex's out degree > in degree
         # or any vertex out degree > 0
-        s, deficit = -1, 0
-        no_cycle = False
-        for v in range(g.V()):
-            if g.get_outdegree(v) > g.get_indegree(v):
-                no_cycle = True
-                deficit += g.get_outdegree(v) > g.get_indegree(v)
-                s = v
+        pass
 
         # eulerian path/cycle not exist
-        if deficit > 1:
-            return
+        pass
 
         # special case if graph has no edge
-        if s < 0:
-            s = 0
+        pass
 
         # build adjencent list with Edge class
-        for v in range(g.V()):
-            for w in g.get_adj(v):
-                self.adj[v].append(self.Edge(v, w))
-
-        path, cycle = Deque(), Deque()
-        self.dfs(g, s, path, cycle)
-
-        if len(path) == g.E() + 1:
-            self.path = path
-
-        if not no_cycle and len(cycle) == g.E() + 1:
-            self.cycle = cycle
+        pass
 
     def dfs(self, g: Digraph, v: int, path: Deque, cycle: Deque):
-        for edge in self.adj[v]:
-            if not edge.is_used:
-                edge.is_used = True
-                self.dfs(g, edge.other(v), path, cycle)
-        path.appendleft(v)
-        cycle.appendleft(v)
+        pass
 
     # return the vertices on an Eulerian path
     def get_path(self) -> list[int]:
-        return list(self.path)
+        pass
 
     # return true if the graph has an Eulerian path
     def has_eulerian_path(self) -> bool:
-        return self.path != None
+        pass
 
     # return the vertices on an Eulerian cycle
     def get_cycle(self) -> list[int]:
-        return list(self.cycle)
+        pass
 
     # return true if the graph has an Eulerian cycle
     def has_eulerian_cycle(self) -> bool:
-        return self.cycle != None
+        pass
 
 
 if __name__ == '__main__':
