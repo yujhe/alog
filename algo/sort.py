@@ -1,3 +1,6 @@
+from typing import Tuple
+
+
 def less(p, q) -> bool:
     return p < q
 
@@ -171,7 +174,7 @@ class Quick3Way:
     def __init__(self):
         pass
 
-    def partition(self, a, lo: int, hi: int) -> int:
+    def partition(self, a, lo: int, hi: int) -> Tuple[int, int]:
         i, lt, gt = lo, lo, hi
         v = a[lo]
 
@@ -208,8 +211,9 @@ class QuickSelect:
     def __init__(self):
         pass
 
-    def partition(self, a, lo, hi):
+    def partition(self, a, lo, hi) -> int:
         i, j = lo+1, hi
+
         while True:
             while less(a[i], a[lo]):
                 if i == hi:
@@ -313,5 +317,5 @@ if __name__ == '__main__':
     assert is_sorted(h_words), f'heap sort is not correct: {h_words}'
 
     q_sel_words = words.copy()
-    QuickSelect().select(q_sel_words, 0) == 'A', f'quick select is not correct'
-    QuickSelect().select(q_sel_words, len(q_sel_words) - 1) == 'X', f'quick select is not correct'
+    assert QuickSelect().select(q_sel_words, 0) == 'A', f'quick select is not correct'
+    assert QuickSelect().select(q_sel_words, len(q_sel_words) - 1) == 'X', f'quick select is not correct'
