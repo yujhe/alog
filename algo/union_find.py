@@ -1,23 +1,43 @@
 class UF:
     # given n nodes
     def __init__(self, n: int):
-        pass
+        self.n = n
+        self.parent = list(range(n))
+        self.size = [1] * n
+        self.num_component = n
 
     # connect p and q
     def union(self, p: int, q: int) -> None:
-        pass
+        root_p = self.find(p)
+        root_q = self.find(q)
+
+        if root_p == root_q:
+            return
+
+        if self.size[root_p] < self.size[root_q]:
+            self.parent[root_p] = root_q
+            self.size[root_q] += self.size[root_p]
+        else:
+            self.parent[root_q] = root_p
+            self.size[root_p] += self.size[root_q]
+
+        self.num_component -= 1
 
     # p and q are connected?
     def connected(self, p: int, q: int) -> bool:
-        pass
+        return self.find(p) == self.find(q)
 
     # return compnoent id of p
     def find(self, p: int) -> int:
-        pass
+        while self.parent[p] != p:
+            self.parent[p] = self.parent[self.parent[p]]
+            p = self.parent[p]
+
+        return p
 
     # return # of components
     def count(self) -> int:
-        pass
+        return self.num_component
 
 
 if __name__ == '__main__':
