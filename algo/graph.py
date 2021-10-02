@@ -12,7 +12,7 @@ class Graph:
 
     # return # of edges
     def E(self) -> int:
-        return int(sum([len(i) for i in self.adj]) / 2)
+        return int(sum([len(v) for v in self.adj]) / 2)
 
     # add edge between v and w
     def add_edge(self, v: int, w: int) -> None:
@@ -40,7 +40,7 @@ class Digraph:
 
     # return # of edges
     def E(self) -> int:
-        return sum([len(i) for i in self.adj])
+        return sum([len(v) for v in self.adj])
 
     # add edge between v and w
     def add_edge(self, v: int, w: int) -> None:
@@ -65,16 +65,14 @@ class Digraph:
         for v in range(self.v):
             for w in self.adj[v]:
                 g.add_edge(w, v)
-
         return g
 
 
 class DepthFirstPaths:
     def __init__(self, g: Graph, s: int):
-        self.source = s
+        self.s = s
         self.visited = [False] * g.V()
         self.edge_to = [None] * g.V()
-
         self.dfs(g, s)
 
     # depth first search from v
@@ -86,6 +84,19 @@ class DepthFirstPaths:
                 self.edge_to[w] = v
                 self.dfs(g, w)
 
+    # depth first search iterative
+    def dfs_iter(self, g: Graph, v: int) -> None:
+        stack = [v]
+
+        while stack:
+            v = stack.pop()
+            if not self.visited[v]:
+                self.visited[v] = True
+                for w in g.get_adj(v):
+                    if not self.visited[w]:
+                        self.edge_to[w] = v
+                        stack.append(w)
+
     # is there a path between source to v?
     def has_path_to(self, v: int) -> bool:
         return self.visited[v]
@@ -96,40 +107,39 @@ class DepthFirstPaths:
             return None
 
         path = Deque()
-        while v != self.source:
+        while v != self.s:
             path.appendleft(v)
             v = self.edge_to[v]
-        path.appendleft(self.source)
+        path.appendleft(v)
 
         return list(path)
 
 
 class BreadthFirstPaths:
     def __init__(self, g: Graph, ss: list[int]):
-        self.sources = ss
+        self.ss = ss
         self.visited = [False] * g.V()
         self.edge_to = [None] * g.V()
         self.dist_to = [None] * g.V()
-
         self.bfs(g, ss)
 
     # breadth first search from multiple sources
     def bfs(self, g: Graph, ss: list[int]) -> None:
-        queue = Deque()
+        q = Deque()
         for s in ss:
             self.visited[s] = True
             self.dist_to[s] = 0
-            queue.append(s)
+            q.appendleft(s)
 
-        while queue:
-            v = queue.popleft()
+        while q:
+            v = q.pop()
 
             for w in g.get_adj(v):
                 if not self.visited[w]:
                     self.visited[w] = True
                     self.edge_to[w] = v
-                    self.dist_to[w] = self.dist_to[v] + 1
-                    queue.append(w)
+                    self.dist_to[w] = 1 + self.dist_to[v]
+                    q.appendleft(w)
 
     # is there a path between source to v
     def has_path_to(self, v: int) -> bool:
@@ -145,7 +155,7 @@ class BreadthFirstPaths:
             return None
 
         path = Deque()
-        while v not in self.sources:
+        while v not in self.ss:
             path.appendleft(v)
             v = self.edge_to[v]
         path.appendleft(v)
@@ -156,30 +166,31 @@ class BreadthFirstPaths:
 class DepthFirstOrder:
     def __init__(self, g: Digraph):
         self.visited = [False] * g.V()
-        self.pre = [0] * g.V()
-        self.post = [0] * g.V()
+        self.pre = [None] * g.V()
+        self.post = [None] * g.V()
+        self.pre_count = 0
+        self.post_count = 0
         self.preorder = []
         self.postorder = []
 
-        self.precounter = 0
-        self.postcounter = 0
-
-        for i in range(g.V()):
-            if not self.visited[i]:
-                self.dfs(g, i)
+        for v in range(g.V()):
+            if not self.visited[v]:
+                self.dfs(g, v)
 
     # depth first search for a graph
     def dfs(self, g: Graph, v: int) -> None:
         self.visited[v] = True
 
-        self.pre[v] = self.precounter
-        self.precounter += 1
+        self.pre[v] = self.pre_count
+        self.pre_count += 1
         self.preorder.append(v)
+
         for w in g.get_adj(v):
             if not self.visited[w]:
                 self.dfs(g, w)
-        self.post[v] = self.postcounter
-        self.postcounter += 1
+
+        self.post[v] = self.post_count
+        self.post_count += 1
         self.postorder.append(v)
 
     # return the preorder number of v
@@ -200,26 +211,26 @@ class DepthFirstOrder:
 
     # return the vertices in reverse postorder
     def get_reverse_post(self) -> list[int]:
-        return list(reversed(self.postorder))
+        return self.postorder[::-1]
 
 
 class ConnectedComponent:
     def __init__(self, g: Graph):
         self.visited = [False] * g.V()
         self.cid = [None] * g.V()
-        self.size = {}
-        self.count = 0
+        self.c_size = {}
+        self.c_count = 0
 
-        for i in range(g.V()):
-            if not self.visited[i]:
-                self.dfs(g, i)
-                self.count += 1
+        for v in range(g.V()):
+            if not self.visited[v]:
+                self.dfs(g, v)
+                self.c_count += 1
 
     # depth first search for a graph
     def dfs(self, g: Graph, v: int) -> None:
         self.visited[v] = True
-        self.cid[v] = self.count
-        self.size[self.count] = self.size.get(self.count, 0) + 1
+        self.cid[v] = self.c_count
+        self.c_size[self.c_count] = self.c_size.get(self.c_count, 0) + 1
 
         for w in g.get_adj(v):
             if not self.visited[w]:
@@ -231,11 +242,11 @@ class ConnectedComponent:
 
     # return # of connected components
     def get_count(self) -> int:
-        return self.count
+        return self.c_count
 
     # return # of vertices in the connected component containing v
     def get_size(self, v) -> int:
-        return self.size[self.cid[v]]
+        return self.c_size[self.get_id(v)]
 
     # return the component id of v
     def get_id(self, v: int) -> int:
@@ -246,22 +257,20 @@ class StrongConnectedComponents:
     def __init__(self, g: Digraph):
         self.visited = [False] * g.V()
         self.cid = [None] * g.V()
-        self.csize = {}
-        self.count = 0
+        self.c_size = {}
+        self.c_count = 0
 
-        reversed_g = g.reverse()
-        dfs_order = DepthFirstOrder(reversed_g)
-
+        dfs_order = DepthFirstOrder(g.reverse())
         for v in dfs_order.get_reverse_post():
             if not self.visited[v]:
                 self.dfs(g, v)
-                self.count += 1
+                self.c_count += 1
 
     # depth first seach for a graph
     def dfs(self, g: Digraph, v: int) -> None:
         self.visited[v] = True
-        self.cid[v] = self.count
-        self.csize[self.count] = self.csize.get(self.count, 0) + 1
+        self.cid[v] = self.c_count
+        self.c_size[self.c_count] = self.c_size.get(self.c_count, 0) + 1
 
         for w in g.get_adj(v):
             if not self.visited[w]:
@@ -273,11 +282,11 @@ class StrongConnectedComponents:
 
     # return # of connected components
     def get_count(self) -> int:
-        return self.count
+        return self.c_count
 
     # return # of vertices in the connected component containing v
     def get_size(self, v) -> int:
-        return self.csize[self.get_id(v)]
+        return self.c_size[self.get_id(v)]
 
     # return the component id of v
     def get_id(self, v: int) -> int:
@@ -326,7 +335,7 @@ class Dicycle:
     def __init__(self, g: Digraph):
         self.visited = [False] * g.V()
         self.edge_to = [None] * g.V()
-        self.visiting = [False] * g.V()
+        self.visiting = set()
         self.cycle = []
 
         for v in range(g.V()):
@@ -336,7 +345,7 @@ class Dicycle:
     # depth first search for finding cycle
     def dfs(self, g: Digraph, v: int):
         self.visited[v] = True
-        self.visiting[v] = True
+        self.visiting.add(v)
 
         for w in g.get_adj(v):
             if self.has_cycle():
@@ -345,9 +354,8 @@ class Dicycle:
             if not self.visited[w]:
                 self.edge_to[w] = v
                 self.dfs(g, w)
-            elif self.visiting[w]:
+            elif w in self.visiting:
                 q = Deque()
-
                 x = v
                 while x != w:
                     q.appendleft(x)
@@ -357,7 +365,7 @@ class Dicycle:
 
                 self.cycle = list(q)
 
-        self.visiting[v] = False
+        self.visiting.remove(v)
 
     # return true if the graph haas a cycle
     def has_cycle(self) -> bool:
@@ -382,20 +390,21 @@ class Eulerian:
             elif v == self.w:
                 return self.v
             else:
-                raise Exception("invalid endpoint")
+                raise Exception('invalid vertex')
 
     def __init__(self, g: Graph):
+        self.adj = [[] for _ in range(g.V())]
         self.path = None
         self.cycle = None
-        self.adj = [[] for _ in range(g.V())]
 
         # find petential start points where the degree of vertex is odd or any vertex with degree > 0
         odd_degree_vertices_num = 0
-        s = -1  # start vertex
+        s = -1
         for v in range(g.V()):
             if g.get_degree(v) % 2 > 0:
                 odd_degree_vertices_num += 1
                 s = v
+        # no odd degree vertex
         if s < 0:
             for v in range(g.V()):
                 if g.get_degree(v) > 0:
@@ -426,26 +435,26 @@ class Eulerian:
                     self.adj[v].append(edge)
                     self.adj[w].append(edge)
 
-        path, cycle = Deque(), Deque()
+        path, cycle = [], []
         self.dfs(s, path, cycle)
 
         if len(path) == g.E() + 1:
-            self.path = path
+            self.path = path[::-1]
 
         if odd_degree_vertices_num == 0 and len(cycle) == g.E() + 1:
-            self.cycle = cycle
+            self.cycle = cycle[::-1]
 
-    def dfs(self, v: int, path: Deque, cycle: Deque):
-        for edge in self.adj[v]:
-            if not edge.is_used:
-                edge.is_used = True
-                self.dfs(edge.other(v), path, cycle)
-        path.appendleft(v)
-        cycle.appendleft(v)
+    def dfs(self, v: int, path: list[int], cycle: list[int]):
+        for e in self.adj[v]:
+            if not e.is_used:
+                e.is_used = True
+                self.dfs(e.other(v), path, cycle)
+        path.append(v)
+        cycle.append(v)
 
     # return the vertices on an Eulerian path
     def get_path(self) -> list[int]:
-        return list(self.path)
+        return self.path
 
     # return true if the graph has an Eulerian path
     def has_eulerian_path(self) -> bool:
@@ -453,7 +462,7 @@ class Eulerian:
 
     # return the vertices on an Eulerian cycle
     def get_cycle(self) -> list[int]:
-        return list(self.cycle)
+        return self.cycle
 
     # return true if the graph has an Eulerian cycle
     def has_eulerian_cycle(self) -> bool:
@@ -474,7 +483,7 @@ class DiEulerian:
             elif v == self.w:
                 return self.v
             else:
-                raise Exception("invalid endpoint")
+                raise Exception('invalid vertex')
 
     # eulerian path: a path that uses every edge in the graph exactly once
     def __init__(self, g: Digraph):
@@ -484,12 +493,11 @@ class DiEulerian:
 
         # find petential start points where the vertex's out degree > in degree
         # or any vertex out degree > 0
-        s, deficit = -1, 0
-        no_cycle = False
+        s = -1
+        deficit = 0
         for v in range(g.V()):
-            if g.get_outdegree(v) > g.get_indegree(v):
-                no_cycle = True
-                deficit += g.get_outdegree(v) > g.get_indegree(v)
+            if g.get_outdegree(v) - g.get_indegree(v) > 0:
+                deficit += 1
                 s = v
 
         # eulerian path/cycle not exist
@@ -503,28 +511,29 @@ class DiEulerian:
         # build adjencent list with Edge class
         for v in range(g.V()):
             for w in g.get_adj(v):
-                self.adj[v].append(self.Edge(v, w))
+                e = self.Edge(v, w)
+                self.adj[v].append(e)
 
-        path, cycle = Deque(), Deque()
-        self.dfs(g, s, path, cycle)
+        path, cycle = [], []
+        self.dfs(s, path, cycle)
 
         if len(path) == g.E() + 1:
-            self.path = path
+            self.path = path[::-1]
 
-        if not no_cycle and len(cycle) == g.E() + 1:
-            self.cycle = cycle
+        if deficit == 0 and len(cycle) == g.E() + 1:
+            self.cycle = cycle[::-1]
 
-    def dfs(self, g: Digraph, v: int, path: Deque, cycle: Deque):
-        for edge in self.adj[v]:
-            if not edge.is_used:
-                edge.is_used = True
-                self.dfs(g, edge.other(v), path, cycle)
-        path.appendleft(v)
-        cycle.appendleft(v)
+    def dfs(self, v: int, path: list[int], cycle: list[int]):
+        for e in self.adj[v]:
+            if not e.is_used:
+                e.is_used = True
+                self.dfs(e.other(v), path, cycle)
+        path.append(v)
+        cycle.append(v)
 
     # return the vertices on an Eulerian path
     def get_path(self) -> list[int]:
-        return list(self.path)
+        return self.path if self.has_eulerian_path() else None
 
     # return true if the graph has an Eulerian path
     def has_eulerian_path(self) -> bool:
@@ -532,11 +541,58 @@ class DiEulerian:
 
     # return the vertices on an Eulerian cycle
     def get_cycle(self) -> list[int]:
-        return list(self.cycle)
+        return self.cycle if self.has_eulerian_cycle() else None
 
     # return true if the graph has an Eulerian cycle
     def has_eulerian_cycle(self) -> bool:
         return self.cycle != None
+
+
+class Bipartite:
+    # bipartite is a graph that has no odd length cycle
+    def __init__(self, g: Graph):
+        self.visited = [False] * g.V()
+        self.edge_to = [None] * g.V()
+        self.color = [False] * g.V()
+        self.cycle = []  # odd length cycle
+
+        for v in range(g.V()):
+            if not self.visited[v]:
+                self.dfs(g, v)
+
+    def dfs(self, g: Graph, v: int):
+        self.visited[v] = True
+
+        for w in g.get_adj(v):
+            if not self.is_bipartite():
+                return
+
+            if not self.visited[w]:
+                self.edge_to[w] = v
+                self.color[w] = not self.color[v]
+                self.dfs(g, w)
+            elif self.color[w] == self.color[v]:
+                self.is_bipartite = False
+                x = v
+                while x != w:
+                    self.cycle.append(x)
+                    x = self.edge_to[x]
+                self.cycle.append(w)
+                self.cycle.append(v)
+
+    # return true if the graph is a bipartite
+    def is_bipartite(self) -> bool:
+        return not self.cycle
+
+    # return the side of vertex
+    def get_color(self, v: int) -> bool:
+        return self.color[v]
+
+    # return odd length cycle if the graph is not a bipartitie
+    def get_odd_cycle(self) -> list[int]:
+        if self.is_bipartite():
+            return None
+        return self.cycle
 
 
 if __name__ == '__main__':
@@ -610,17 +666,16 @@ if __name__ == '__main__':
 
         dfs_paths = DepthFirstPaths(graph, 0)
 
-        paths = {
-            0: [0],
-            1: [0, 2, 1],
-            2: [0, 2],
-            3: [0, 2, 3],
-            4: [0, 2, 3, 4],
-            5: [0, 2, 3, 5]
-        }
-        for v, ps in paths.items():
-            assert dfs_paths.has_path_to(v) and dfs_paths.get_path_to(
-                v) == ps, f'path_to({v})={dfs_paths.get_path_to(v)} is not correct'
+        path_to = set([0, 1, 2, 3, 4, 5])
+        for v in range(graph.V()):
+            if v in path_to:
+                assert dfs_paths.has_path_to(v), f'has a path to {v}'
+                path = dfs_paths.get_path_to(v)
+                assert path[0] == 0 and path[-1] == v, f'incorrect start/end points'
+                for i in range(1, len(path)-1):
+                    assert path[i] in graph.get_adj(path[i-1]), f'{path[i-1]} and {path[i]} is not connected'
+            else:
+                assert not dfs_paths.has_path_to(v), f'do not have a path to {v}'
 
     with open('input/bfs_paths.txt', 'r') as fin:
         v = int(fin.readline().strip())
@@ -634,17 +689,17 @@ if __name__ == '__main__':
 
         bfs_paths = BreadthFirstPaths(graph, [0])
 
-        paths = {
-            0: [0],
-            1: [0, 1],
-            2: [0, 2],
-            3: [0, 2, 3],
-            4: [0, 2, 4],
-            5: [0, 5]
-        }
-        for v, ps in paths.items():
-            assert bfs_paths.has_path_to(v) and bfs_paths.get_path_to(v) == ps, f'path_to({v}) is not correct'
-            assert bfs_paths.get_dist_to(v) == (len(ps) - 1), f'dist_to({v}) is not correct'
+        path_to = set([0, 1, 2, 3, 4, 5])
+        for v in range(graph.V()):
+            if v in path_to:
+                assert bfs_paths.has_path_to(v), f'has a path to {v}'
+                path = bfs_paths.get_path_to(v)
+                assert path[0] == 0 and path[-1] == v, f'incorrect start/end points'
+                for i in range(1, len(path)-1):
+                    assert path[i] in graph.get_adj(path[i-1]), f'{path[i-1]} and {path[i]} is not connected'
+                assert len(path)-1 == bfs_paths.get_dist_to(v), f'dist_to({v}) is not correct'
+            else:
+                assert not dfs_paths.has_path_to(v), f'do not have a path to {v}'
 
     with open('input/dfs_order.txt', 'r') as fin:
         v = int(fin.readline().strip())
@@ -788,3 +843,29 @@ if __name__ == '__main__':
 
         assert di_eulerian.has_eulerian_cycle(), f'eulerian cycle does exist'
         assert di_eulerian.get_cycle() == path, f'eulerian cycle is not correct'
+
+    with open('input/bipartite.txt', 'r') as fin:
+        v = int(fin.readline().strip())
+        e = int(fin.readline().strip())
+
+        graph = Graph(v)
+
+        for i in range(e):
+            p, q = [int(x) for x in fin.readline().strip().split()]
+            graph.add_edge(p, q)
+
+        bipartite = Bipartite(graph)
+        subsets = [
+            ([0, 4], [1, 2, 3, 5, 6]),
+            ([7], [8]),
+            ([9, 11], [10, 12])
+        ]
+
+        assert bipartite.is_bipartite(), f'graph is a bipartite'
+        if bipartite.is_bipartite():
+            for subset in subsets:
+                s1, s2 = subset[0], subset[1]
+                s1 = set([bipartite.get_color(v) for v in s1])
+                s2 = set([bipartite.get_color(v) for v in s2])
+
+                assert len(s1) == 1 and len(s2) == 1 and not (s1 & s2), f'incorrect color'
