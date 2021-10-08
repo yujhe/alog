@@ -1,26 +1,25 @@
 class Solution:
     def lengthOfLongestSubstring(self, s: str) -> int:
-        longest = {}
+        longest = 0
 
-        for i, c in enumerate(s):
-            # skip the char that contains in the longest string
-            if c in longest and longest[c] > i:
-                continue
+        chars = {}
+        l = 0
 
-            cur = {}
-            for j in range(i, len(s)):
-                if s[j] in cur:
-                    break
-                cur[s[j]] = j
+        for r, c in enumerate(s):
+            if c in chars:
+                # char repeated, update the left index
+                # `abcba`: 1) `b` repeated, l=chars['b']+1 2) `a` repeated, l=max(l, chars['a']+1)
+                l = max(l, chars[c]+1)
+            chars[c] = r
+            longest = max(longest, r-l+1)
 
-            if len(cur) > len(longest):
-                longest = cur
-
-        return len(longest)
+        return longest
 
 
 if __name__ == '__main__':
-    input = 'abcabcbb'
+    s = "abcabcbb"
 
-    print(f'input: {input}')
-    print(f'output: {Solution().lengthOfLongestSubstring(input)}')
+    solution = Solution()
+    ans = solution.lengthOfLongestSubstring(s)
+
+    assert ans == 3, f'ans={ans}'
