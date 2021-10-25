@@ -5,24 +5,32 @@ class Solution:
     def merge(self, intervals: List[List[int]]) -> List[List[int]]:
         intervals.sort()
 
-        n = []
-        for idx, interval in enumerate(intervals):
-            if idx == 0:
-                n.append(interval)
-                continue
+        s, e = intervals[0][0], intervals[0][1]
+        merged = []
 
-            s, e = interval[0], interval[1]
-            prev_s, prev_e = n[-1][0], n[-1][1]
-            if s <= prev_e:
-                n[-1] = [prev_s, max(e, prev_e)]
+        for interval in intervals:
+            if self.is_overlapped([s, e], interval):
+                s = min(s, interval[0])
+                e = max(e, interval[1])
             else:
-                n.append(interval)
+                merged.append([s, e])
+                s, e = interval[0], interval[1]
+        merged.append([s, e])
 
-        return n
+        return merged
+
+    def is_overlapped(self, v1: tuple[int, int], v2: tuple[int, int]) -> bool:
+        return v1[0] <= v2[0] <= v1[1] or v1[0] <= v2[1] <= v1[1]
 
 
 if __name__ == '__main__':
-    input = [[1, 4], [2, 3]]
+    # Given an array of intervals where intervals[i] = [starti, endi],
+    # merge all overlapping intervals,
+    # and return an array of the non-overlapping intervals that cover all the intervals in the input.
 
-    print(f'input: {input}')
-    print(f'output: {Solution().merge(input)}')
+    intervals = [[1, 3], [2, 6], [8, 10], [15, 18]]
+
+    solution = Solution()
+    ans = solution.merge(intervals)
+
+    assert ans == [[1, 6], [8, 10], [15, 18]], f'ans={ans}'
