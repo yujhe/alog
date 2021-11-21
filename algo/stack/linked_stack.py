@@ -1,3 +1,6 @@
+from typing import Iterator
+
+
 class LinkedStack:
     class Node:
         def __init__(self, item):
@@ -31,6 +34,21 @@ class LinkedStack:
     def size(self) -> int:
         return self.n
 
+    def __iter__(self):
+        self.x = self.head
+        return self
+
+    def __next__(self):
+        if self.x:
+            n = self.x.item
+            self.x = self.x.next
+            return n
+        else:
+            raise StopIteration
+
+    def iterator(self) -> Iterator[str]:
+        return iter(self)
+
 
 if __name__ == '__main__':
     stack = LinkedStack()
@@ -46,3 +64,4 @@ if __name__ == '__main__':
 
     assert out == ['to', 'be', 'not', 'that', 'or', 'be'], f'out={out}'
     assert stack.size() == 2, f'size={stack.size()}'
+    assert list(stack.iterator()) == ['is', 'to'], f'stack={list(stack.iterator())}'

@@ -1,3 +1,6 @@
+from typing import Iterator
+
+
 class LinkedQueue:
     class Node:
         def __init__(self, item):
@@ -40,6 +43,21 @@ class LinkedQueue:
     def is_empty(self) -> bool:
         return self.n == 0
 
+    def __iter__(self):
+        self.x = self.head
+        return self
+
+    def __next__(self):
+        if self.x:
+            n = self.x.item
+            self.x = self.x.next
+            return n
+        else:
+            raise StopIteration
+
+    def iterator(self) -> Iterator[str]:
+        return iter(self)
+
 
 if __name__ == '__main__':
     queue = LinkedQueue()
@@ -55,3 +73,4 @@ if __name__ == '__main__':
 
     assert out == ['to', 'be', 'or', 'not', 'to', 'be'], f'out={out}'
     assert queue.size() == 2, f'size={queue.size()}'
+    assert list(queue.iterator()) == ['that', 'is'], f'queue={list(queue.iterator())}'

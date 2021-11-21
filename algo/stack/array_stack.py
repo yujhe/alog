@@ -29,7 +29,7 @@ class ArrayStack:
         return self.n
 
     def iterator(self) -> Iterator[str]:
-        return iter(self.arr)
+        return iter(self.arr[::-1])
 
     def check(self) -> None:
         arr_size = len(self.arr)
@@ -62,4 +62,4 @@ if __name__ == '__main__':
 
     assert out == ['to', 'be', 'not', 'that', 'or', 'be'], f'out={out}'
     assert stack.size() == 2, f'size={stack.size()}'
-    assert list(stack.iterator()) == ['to', 'is'], f'stack={list(stack.iterator())}'
+    assert list(stack.iterator()) == ['is', 'to'], f'stack={list(stack.iterator())}'
